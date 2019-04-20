@@ -1,3 +1,9 @@
 MeshGenerator/Library/*
 MeshGenerator/Logs/*
 MeshGenerator/Temp/*
+MeshGenerator/obj/*
+Assembly-CSharp.csproj.FileListAbsolute.txt
+MeshGenerator/MeshGenerator.sln
+MeshGenerator/.vs/MeshGenerator/v14/.suo
+MeshGenerator/Assembly-CSharp-Editor.csproj
+MeshGenerator/Assembly-CSharp.csproj
