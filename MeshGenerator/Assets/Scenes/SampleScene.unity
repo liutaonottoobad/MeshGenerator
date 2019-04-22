@@ -487,8 +487,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: -0.7071068}
-  m_LocalPosition: {x: 1.0616858, y: 13.168785, z: -0.09966872}
+  m_LocalRotation: {x: -0.05207821, y: 0.9464537, z: -0.2506615, w: -0.19667777}
+  m_LocalPosition: {x: 3.5654001, y: 7.232315, z: 12.378993}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -625,25 +625,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357eefc282170374781fdf5dba438a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: b1cfbbccfce4bd541b54f25436bf067c, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  Verticals: []
-  _verticals: []
 --- !u!222 &1391836369
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -874,7 +855,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d684fb428e7a492489c45c3966e7d1d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Height: 1
+  Height: 0
   BoxCollider: {fileID: 1845328282}
   BoxColliderView: {fileID: 397900319}
 --- !u!65 &1845328282
@@ -957,6 +938,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1960332730}
   - component: {fileID: 1960332729}
+  - component: {fileID: 1960332731}
   m_Layer: 0
   m_Name: TerrainMainEditor
   m_TagString: Untagged
@@ -990,3 +972,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1960332731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1960332728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38a4170a2b5f31541a7e216a9f431ea3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CellSize: {x: 1, y: 0, z: 1}
+  Width: 1
+  Height: 1
+  Path: Assets/grid_line.asset
+  MeshGeneratorTypes:
+  - MaybeInside.GridMeshGenerator

@@ -44,6 +44,38 @@ namespace MaybeInside
 
 		private TouchInfo _select;
 
+		private Vector3 NearestPos(Vector3 touchPos)
+		{
+			float halfWidth = 0.5f;
+			float halfHeight = 0.5f;
+
+			var pos = touchPos;
+
+			var width = (int)(touchPos.x / halfWidth);
+			var x = touchPos.x - width * halfWidth;
+			if (Mathf.Abs(x) < halfWidth * 0.5f)
+			{
+				pos.x = width * halfWidth;
+			}
+			else
+			{
+				pos.x = (width + Mathf.Sign(width)) * halfWidth;
+			}
+
+			var height = (int)(touchPos.z / halfHeight);
+			var z = touchPos.z - height * halfHeight;
+			if (Mathf.Abs(z) < halfHeight * 0.5f)
+			{
+				pos.z = height * halfHeight;
+			}
+			else
+			{
+				pos.z = (height + Mathf.Sign(height)) * halfHeight;
+			}
+
+			return pos;
+		}
+
 		private void LateUpdate()
 		{
 			if (GameInput.IsTouchBegin())
@@ -53,7 +85,9 @@ namespace MaybeInside
 				{
 					Debug.LogFormat("name:{0}, pos:{1}", touchInfo.HitTransform.name, touchInfo.WorldPos);
 					_select = touchInfo;
-					_select.Reactive.TouchBegin();
+					_select.Reactive.TouchBegin(touchInfo.WorldPos);
+
+					Debug.DrawLine(Camera.transform.position, touchInfo.WorldPos, Color.red, 10);
 				}
 			}
 			else if (_select.HitTransform != null && _select.Reactive != null && GameInput.IsTouchMove())
@@ -64,14 +98,20 @@ namespace MaybeInside
 					_select.Reactive.TouchMoved(touchInfo.WorldPos);
 				}
 			}
+			else if (_select.HitTransform != null && _select.Reactive != null && GameInput.IsTouchEnd())
+			{
+				TouchInfo touchInfo;
+				if (TryRayCastGround(GameInput.Position, out touchInfo))
+				{
+					_select.Reactive.TouchEnd(touchInfo.WorldPos);
+				}
+				_select.HitTransform = null;
+				_select.Reactive = null;
+			}
 			else
 			{
 				_select.HitTransform = null;
-				if (_select.Reactive != null)
-				{
-					_select.Reactive.TouchEnd();
-					_select.Reactive = null;
-				}
+				_select.Reactive = null;
 			}
 		}
 	}

@@ -12,7 +12,7 @@ namespace MaybeInside
 {
 	public class ReactiveGround : MonoBehaviour, IReactive
 	{
-		public void TouchBegin()
+		public void TouchBegin(Vector3 pos)
 		{
 			throw new System.NotImplementedException();
 		}
@@ -22,7 +22,7 @@ namespace MaybeInside
 			throw new System.NotImplementedException();
 		}
 
-		public void TouchEnd()
+		public void TouchEnd(Vector3 pos)
 		{
 			throw new System.NotImplementedException();
 		}
