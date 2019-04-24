@@ -14,10 +14,7 @@ namespace MaybeInside
 {
 	public static class GameInput
 	{
-		public static Vector3 Position
-		{
-			get { return Input.mousePosition; }
-		}
+		public static Vector3 Position => Input.mousePosition;
 
 		public static bool IsTouchBegin()
 		{

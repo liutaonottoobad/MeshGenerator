@@ -14,6 +14,16 @@ namespace MaybeInside
 	{
 		public Camera Camera;
 
+		public int ReactiveGroundLayer;
+		public int ReactiveBlocksLayer;
+
+		[EditorButton]
+		private void RefreshReactiveLayer()
+		{
+			ReactiveGroundLayer = LayerMask.GetMask("ReactiveGround");
+			ReactiveBlocksLayer = LayerMask.GetMask("ReactiveBlocks");
+		}
+
 		private struct TouchInfo
 		{
 			public Vector3 ScreenPos;
@@ -22,12 +32,11 @@ namespace MaybeInside
 			public IReactive Reactive;
 		}
 
-		private bool TryRayCastGround(Vector3 screenPos, out TouchInfo touchInfo)
+		private bool TryRayCastReactiveObject(Vector3 screenPos, int layer, out TouchInfo touchInfo)
 		{
-			var camera = Camera;
-			var ray = camera.ScreenPointToRay(screenPos);
+			var ray = Camera.ScreenPointToRay(screenPos);
 			RaycastHit rayCastHit;
-			if (Physics.Raycast(ray, out rayCastHit, Mathf.Infinity))
+			if (Physics.Raycast(ray, out rayCastHit, Mathf.Infinity, layer))
 			{
 				touchInfo = new TouchInfo()
 				{
@@ -44,46 +53,13 @@ namespace MaybeInside
 
 		private TouchInfo _select;
 
-		private Vector3 NearestPos(Vector3 touchPos)
-		{
-			float halfWidth = 0.5f;
-			float halfHeight = 0.5f;
-
-			var pos = touchPos;
-
-			var width = (int)(touchPos.x / halfWidth);
-			var x = touchPos.x - width * halfWidth;
-			if (Mathf.Abs(x) < halfWidth * 0.5f)
-			{
-				pos.x = width * halfWidth;
-			}
-			else
-			{
-				pos.x = (width + Mathf.Sign(width)) * halfWidth;
-			}
-
-			var height = (int)(touchPos.z / halfHeight);
-			var z = touchPos.z - height * halfHeight;
-			if (Mathf.Abs(z) < halfHeight * 0.5f)
-			{
-				pos.z = height * halfHeight;
-			}
-			else
-			{
-				pos.z = (height + Mathf.Sign(height)) * halfHeight;
-			}
-
-			return pos;
-		}
-
 		private void LateUpdate()
 		{
 			if (GameInput.IsTouchBegin())
 			{
 				TouchInfo touchInfo;
-				if (TryRayCastGround(GameInput.Position, out touchInfo))
+				if (TryRayCastReactiveObject(GameInput.Position, ReactiveBlocksLayer, out touchInfo))
 				{
-					Debug.LogFormat("name:{0}, pos:{1}", touchInfo.HitTransform.name, touchInfo.WorldPos);
 					_select = touchInfo;
 					_select.Reactive.TouchBegin(touchInfo.WorldPos);
 
@@ -93,7 +69,11 @@ namespace MaybeInside
 			else if (_select.HitTransform != null && _select.Reactive != null && GameInput.IsTouchMove())
 			{
 				TouchInfo touchInfo;
-				if (TryRayCastGround(GameInput.Position, out touchInfo))
+				if (TryRayCastReactiveObject(GameInput.Position, ReactiveGroundLayer, out touchInfo))
+				{
+					_select.Reactive.TouchMoved(touchInfo.WorldPos);
+				}
+				else if (TryRayCastReactiveObject(GameInput.Position, ReactiveBlocksLayer, out touchInfo))
 				{
 					_select.Reactive.TouchMoved(touchInfo.WorldPos);
 				}
@@ -101,7 +81,11 @@ namespace MaybeInside
 			else if (_select.HitTransform != null && _select.Reactive != null && GameInput.IsTouchEnd())
 			{
 				TouchInfo touchInfo;
-				if (TryRayCastGround(GameInput.Position, out touchInfo))
+				if (TryRayCastReactiveObject(GameInput.Position, ReactiveGroundLayer, out touchInfo))
+				{
+					_select.Reactive.TouchEnd(touchInfo.WorldPos);
+				}
+				else if (TryRayCastReactiveObject(GameInput.Position, ReactiveBlocksLayer, out touchInfo))
 				{
 					_select.Reactive.TouchEnd(touchInfo.WorldPos);
 				}

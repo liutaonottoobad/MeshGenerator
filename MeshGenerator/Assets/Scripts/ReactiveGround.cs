@@ -12,19 +12,29 @@ namespace MaybeInside
 {
 	public class ReactiveGround : MonoBehaviour, IReactive
 	{
+		private IReactive _reactive;
+
 		public void TouchBegin(Vector3 pos)
 		{
-			throw new System.NotImplementedException();
+			pos.x = 0f;
+			pos.z = 0f;
+			transform.position = pos;
 		}
 
 		public void TouchMoved(Vector3 pos)
 		{
-			throw new System.NotImplementedException();
+			_reactive.TouchMoved(pos);
 		}
 
 		public void TouchEnd(Vector3 pos)
 		{
-			throw new System.NotImplementedException();
+			_reactive.TouchEnd(pos);
+		}
+
+		public void SetReactive(IReactive reactive)
+		{
+			this.gameObject.SetActive(reactive != null);
+			_reactive = reactive;
 		}
 	}
 }

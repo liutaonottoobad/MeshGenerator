@@ -13,6 +13,7 @@ namespace MaybeInside
 	public class ReactiveBlock : MonoBehaviour, IReactive
 	{
 		public BoxCollider BoxCollider;
+		public ReactiveGround ReactiveGround;
 
 		private Vector3 NearestPos(Vector3 touchPos)
 		{
@@ -46,27 +47,35 @@ namespace MaybeInside
 			return pos;
 		}
 
+		private void CreateClickPoint(Vector3 pos)
+		{
+			var point = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+			var t = point.transform;
+			t.localScale = Vector3.one * 0.1f;
+			t.position = pos;
+		}
+
 		public void TouchBegin(Vector3 pos)
 		{
-			var p = this.NearestPos(pos);
-			p.y = transform.localPosition.y;
-			transform.localPosition = p;
-			//			BoxCollider.enabled = false;
+			ReactiveGround.TouchBegin(pos);
+			ReactiveGround.SetReactive(this);
+			BoxCollider.enabled = false;
 		}
 
 		public void TouchMoved(Vector3 pos)
 		{
-			var p = pos;//this.NearestPos(pos);
-			p.y = transform.localPosition.y;
-			transform.localPosition = p;
+			var p = pos;
+			p.y = transform.position.y;
+			transform.position = p;
 		}
 
 		public void TouchEnd(Vector3 pos)
 		{
 			var p = this.NearestPos(pos);
-			p.y = transform.localPosition.y;
-			transform.localPosition = p;
-			//			BoxCollider.enabled = true;
+			p.y = transform.position.y;
+			transform.position = p;
+			ReactiveGround.SetReactive(null);
+			BoxCollider.enabled = true;
 		}
 	}
 }
